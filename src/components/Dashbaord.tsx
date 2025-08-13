@@ -25,7 +25,7 @@ export default function Dashboard() {
   if (isLoading) return <div>Loading...</div>;
   const router = useRouter();
   return (
-    <Container maxWidth="lg" sx={{ mt: 2 }}>
+    <Container maxWidth="lg" sx={{ mt: 8 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         Courses
       </Typography>
@@ -68,7 +68,6 @@ export default function Dashboard() {
               >
                 View
               </Button>
-
               {user?.role === "admin" && (
                 <Box>
                   <IconButton
