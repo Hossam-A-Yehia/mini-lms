@@ -1,31 +1,63 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { Lesson } from '@/models/lesson'
+import Link from "next/link";
+import { Lesson } from "@/models/lesson";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Typography,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useLessons } from "@/hooks/useLessons";
 
 export default function LessonDetail({
   lesson,
   isAdmin,
 }: {
-  lesson: Lesson
-  isAdmin: boolean
+  lesson: Lesson;
+  isAdmin: boolean;
 }) {
+    const { deleteLesson } = useLessons(lesson.courseId);
+  
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">{lesson.title}</h1>
-        {isAdmin && (
-          <Link
-            href={`/dashboard/courses/${lesson.courseId}/lessons/${lesson.id}/edit`}
-            className="text-yellow-500 hover:text-yellow-700"
+    <Box maxWidth="800px" mx="auto" mt={10}>
+      <Card sx={{ mb: 4 }}>
+        <CardHeader
+          title={
+            <Typography variant="h5" fontWeight="bold">
+              {lesson.title}
+            </Typography>
+          }
+          action={
+            isAdmin && (
+              <Button
+                variant="outlined"
+                color="warning"
+                startIcon={<DeleteIcon />}
+                onClick={() => deleteLesson.mutate(lesson.id)}
+              >
+                Delete Lesson
+              </Button>
+            )
+          }
+        />
+        <Divider />
+        <CardContent>
+          <Typography
+            variant="body1"
+            sx={{
+              whiteSpace: "pre-line",
+              lineHeight: 1.7,
+            }}
           >
-            Edit Lesson
-          </Link>
-        )}
-      </div>
-      <div className="prose max-w-none">
-        <p className="whitespace-pre-line">{lesson.content}</p>
-      </div>
-    </div>
-  )
+            {lesson.content}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
+  );
 }

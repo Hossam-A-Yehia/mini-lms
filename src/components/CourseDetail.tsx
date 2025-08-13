@@ -25,6 +25,7 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
   const { courses, isLoading: isCoursesLoading } = useCourses();
   const { lessons, isLoading: isLessonsLoading } = useLessons(params.id);
   const { user } = useAuth();
+  const { deleteLesson } = useLessons(params.id);
 
   const isAdmin = user?.role === "admin";
 
@@ -59,6 +60,7 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
                 color="warning"
                 component={Link}
                 href={`/dashboard/courses/${course.id}/edit`}
+                disabled
               >
                 Edit Course
               </Button>
@@ -96,6 +98,7 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
                           color="warning"
                           component={Link}
                           href={`/dashboard/courses/${course.id}/lessons/${lesson.id}/edit`}
+                          disabled
                         >
                           Edit
                         </Button>
@@ -103,6 +106,7 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
                           size="small"
                           variant="text"
                           color="error"
+                          onClick={() => deleteLesson.mutate(lesson.id)}
                         >
                           Delete
                         </Button>
