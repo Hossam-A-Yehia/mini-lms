@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type User = {
   email: string;
@@ -9,14 +9,14 @@ type User = {
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const login = (email: string) => {
-    // Mock login - in a real app, this would verify credentials
     const role: "admin" | "user" = email.includes("admin") ? "admin" : "user";
-    const user = { email, role };
-    setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
-    return user;
+    const newUser: User = { email, role };
+    setUser(newUser);
+    localStorage.setItem("user", JSON.stringify(newUser));
+    return newUser;
   };
 
   const logout = () => {
@@ -24,13 +24,13 @@ export const useAuth = () => {
     localStorage.removeItem("user");
   };
 
-  // Initialize from localStorage if available
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser && !user) {
-      setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      setUser(JSON.parse(storedUser) as User);
     }
-  }
+    setLoading(false);
+  }, []);
 
-  return { user, login, logout };
+  return { user, loading, login, logout };
 };
