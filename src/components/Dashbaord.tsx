@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { useCourses } from "@/hooks/useCourses";
 
 export default function Dashboard() {
-    const router = useRouter();
+  const router = useRouter();
 
   const { courses, isLoading, deleteCourse } = useCourses();
   const { user } = useAuth();
@@ -34,6 +34,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
           <Card
+          key={course.id}
             elevation={4}
             sx={{
               borderRadius: 3,
@@ -72,6 +73,7 @@ export default function Dashboard() {
               {user?.role === "admin" && (
                 <Box>
                   <IconButton
+                    disabled
                     color="primary"
                     onClick={() =>
                       router.push(`/dashboard/courses/${course.id}/edit`)

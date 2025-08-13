@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { notFound } from "next/navigation";
 import { useCourses } from "@/hooks/useCourses";
 import { useAuth } from "@/lib/auth";
@@ -21,11 +22,17 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function CourseDetail({ params }: { params: { id: string } }) {
+export default function CourseDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const resolvedParams = React.use(params);
+
   const { courses, isLoading: isCoursesLoading } = useCourses();
-  const { lessons, isLoading: isLessonsLoading } = useLessons(params.id);
+  const { lessons, isLoading: isLessonsLoading } = useLessons(resolvedParams.id);
   const { user } = useAuth();
-  const { deleteLesson } = useLessons(params.id);
+  const { deleteLesson } = useLessons(resolvedParams.id);
 
   const isAdmin = user?.role === "admin";
 
@@ -37,12 +44,11 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
     );
   }
 
-  const course = courses.find((c) => c.id === params.id);
+  const course = courses.find((c) => c.id === resolvedParams.id);
   if (!course) return notFound();
 
   return (
     <Box maxWidth="800px" mx="auto" mt={10}>
-      {/* Course Details */}
       <Card sx={{ mb: 4 }}>
         <CardHeader
           title={
@@ -76,8 +82,6 @@ export default function CourseDetail({ params }: { params: { id: string } }) {
           </CardContent>
         )}
       </Card>
-
-      {/* Lessons List */}
       <Typography variant="h6" gutterBottom>
         Lessons
       </Typography>

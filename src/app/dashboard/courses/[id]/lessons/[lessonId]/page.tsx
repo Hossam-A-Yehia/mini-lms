@@ -1,21 +1,25 @@
-"use client"
-import { notFound } from 'next/navigation'
-import { useLessons } from '@/hooks/useLessons'
-import { useAuth } from '@/lib/auth'
-import LessonDetail from '@/components/LessonDetail';
+"use client";
+
+import * as React from "react";
+import { notFound } from "next/navigation";
+import { useLessons } from "@/hooks/useLessons";
+import { useAuth } from "@/lib/auth";
+import LessonDetail from "@/components/LessonDetail";
 
 export default function LessonPage({
   params,
 }: {
-  params: { id: string; lessonId: string }
+  params: Promise<{ id: string; lessonId: string }>;
 }) {
-  const { lessons, isLoading } = useLessons(params.id)
-  const { user } = useAuth()
+  const resolvedParams = React.use(params);
 
-  if (isLoading) return <div>Loading...</div>
+  const { lessons, isLoading } = useLessons(resolvedParams.id);
+  const { user } = useAuth();
 
-  const lesson = lessons.find((l) => l.id === params.lessonId)
-  if (!lesson) return notFound()
+  if (isLoading) return <div>Loading...</div>;
 
-  return <LessonDetail lesson={lesson} isAdmin={user?.role === 'admin'} />
+  const lesson = lessons.find((l) => l.id === resolvedParams.lessonId);
+  if (!lesson) return notFound();
+
+  return <LessonDetail lesson={lesson} isAdmin={user?.role === "admin"} />;
 }
