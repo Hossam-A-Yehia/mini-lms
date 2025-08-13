@@ -1,3 +1,4 @@
+"use client"
 import { notFound } from 'next/navigation'
 import { useLessons } from '@/hooks/useLessons'
 import { useAuth } from '@/lib/auth'

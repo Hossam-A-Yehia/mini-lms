@@ -1,71 +1,137 @@
 "use client";
 
+import { notFound } from "next/navigation";
+import { useCourses } from "@/hooks/useCourses";
+import { useAuth } from "@/lib/auth";
+import { useLessons } from "@/hooks/useLessons";
+
 import Link from "next/link";
-import { Course } from "@/models/course";
-import { Lesson } from "@/models/lesson";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-export default function CourseDetail({
-  course,
-  lessons,
-  isAdmin,
-}: {
-  course: Course;
-  lessons: Lesson[];
-  isAdmin: boolean;
-}) {
+export default function CourseDetail({ params }: { params: { id: string } }) {
+  const { courses, isLoading: isCoursesLoading } = useCourses();
+  const { lessons, isLoading: isLessonsLoading } = useLessons(params.id);
+  const { user } = useAuth();
+
+  const isAdmin = user?.role === "admin";
+
+  if (isCoursesLoading || isLessonsLoading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={6}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  const course = courses.find((c) => c.id === params.id);
+  if (!course) return notFound();
+
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">{course.title}</h1>
-        <p className="text-gray-600">{course.description}</p>
+    <Box maxWidth="800px" mx="auto" mt={10}>
+      {/* Course Details */}
+      <Card sx={{ mb: 4 }}>
+        <CardHeader
+          title={
+            <Typography variant="h5" fontWeight="bold">
+              {course.title}
+            </Typography>
+          }
+          subheader={course.description}
+        />
         {isAdmin && (
-          <div className="mt-4 space-x-4">
-            <Link
-              href={`/dashboard/courses/${course.id}/edit`}
-              className="text-yellow-500 hover:text-yellow-700"
-            >
-              Edit Course
-            </Link>
-            <Link
-              href={`/dashboard/courses/${course.id}/lessons/new`}
-              className="text-green-500 hover:text-green-700"
-            >
-              Add Lesson
-            </Link>
-          </div>
-        )}
-      </div>
-
-      <h2 className="text-xl font-semibold mb-4">Lessons</h2>
-      {lessons.length === 0 ? (
-        <p>No lessons yet.</p>
-      ) : (
-        <ul className="space-y-4">
-          {lessons.map((lesson) => (
-            <li key={lesson.id} className="border-b pb-4">
-              <Link
-                href={`/dashboard/courses/${course.id}/lessons/${lesson.id}`}
-                className="text-blue-500 hover:text-blue-700"
+          <CardContent>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="outlined"
+                color="warning"
+                component={Link}
+                href={`/dashboard/courses/${course.id}/edit`}
               >
-                <h3 className="text-lg font-medium">{lesson.title}</h3>
-              </Link>
-              {isAdmin && (
-                <div className="mt-2 space-x-2">
-                  <Link
-                    href={`/dashboard/courses/${course.id}/lessons/${lesson.id}/edit`}
-                    className="text-sm text-yellow-500 hover:text-yellow-700"
-                  >
-                    Edit
-                  </Link>
-                  <button className="text-sm text-red-500 hover:text-red-700">
-                    Delete
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+                Edit Course
+              </Button>
+              <Button
+                variant="outlined"
+                color="success"
+                component={Link}
+                href={`/dashboard/courses/${course.id}/lessons/new`}
+              >
+                Add Lesson
+              </Button>
+            </Stack>
+          </CardContent>
+        )}
+      </Card>
+
+      {/* Lessons List */}
+      <Typography variant="h6" gutterBottom>
+        Lessons
+      </Typography>
+      {lessons.length === 0 ? (
+        <Typography color="text.secondary">No lessons yet.</Typography>
+      ) : (
+        <Card>
+          <List>
+            {lessons.map((lesson, index) => (
+              <Box key={lesson.id}>
+                <ListItem
+                  secondaryAction={
+                    isAdmin && (
+                      <Stack direction="row" spacing={1}>
+                        <Button
+                          size="small"
+                          variant="text"
+                          color="warning"
+                          component={Link}
+                          href={`/dashboard/courses/${course.id}/lessons/${lesson.id}/edit`}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="text"
+                          color="error"
+                        >
+                          Delete
+                        </Button>
+                      </Stack>
+                    )
+                  }
+                >
+                  <ListItemText
+                    primary={
+                      <Link
+                        href={`/dashboard/courses/${course.id}/lessons/${lesson.id}`}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                      >
+                        <Typography variant="body1" fontWeight="medium" color="primary">
+                          {lesson.title}
+                        </Typography>
+                      </Link>
+                    }
+                  />
+                </ListItem>
+                {index < lessons.length - 1 && <Divider />}
+              </Box>
+            ))}
+          </List>
+        </Card>
       )}
-    </div>
+    </Box>
   );
 }

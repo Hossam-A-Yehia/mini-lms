@@ -19,11 +19,12 @@ import { useRouter } from "next/navigation";
 import { useCourses } from "@/hooks/useCourses";
 
 export default function Dashboard() {
+    const router = useRouter();
+
   const { courses, isLoading, deleteCourse } = useCourses();
   const { user } = useAuth();
 
   if (isLoading) return <div>Loading...</div>;
-  const router = useRouter();
   return (
     <Container maxWidth="lg" sx={{ mt: 8 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
