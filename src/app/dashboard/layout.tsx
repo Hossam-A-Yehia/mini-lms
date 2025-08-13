@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     <AuthGuard>
       <div className="flex min-h-screen">
         <DashboardNav />
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1 p-5">{children}</main>
       </div>
     </AuthGuard>
     </ClientWrapper>

@@ -1,50 +1,96 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useCourses } from '@/hooks/useCourses'
-import { useAuth } from '@/lib/auth'
+import { useAuth } from "@/lib/auth";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Container,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useRouter } from "next/navigation";
+import { useCourses } from "@/hooks/useCourses";
 
 export default function Dashboard() {
-  const { courses, isLoading, deleteCourse } = useCourses()
-  const { user } = useAuth()
+  const { courses, isLoading, deleteCourse } = useCourses();
+  const { user } = useAuth();
 
-  if (isLoading) return <div>Loading...</div>
-
+  if (isLoading) return <div>Loading...</div>;
+  const router = useRouter();
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Courses</h1>
+    <Container maxWidth="lg" sx={{ mt: 2 }}>
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        Courses
+      </Typography>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
-          <div key={course.id} className="border rounded-lg p-4 shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">{course.title}</h2>
-            <p className="text-gray-600 mb-4">{course.description}</p>
-            <div className="flex justify-between">
-              <Link
-                href={`/dashboard/courses/${course.id}`}
-                className="text-blue-500 hover:text-blue-700"
+          <Card
+            elevation={4}
+            sx={{
+              borderRadius: 3,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <CardHeader
+              title={
+                <Typography variant="h6" fontWeight="bold">
+                  {course.title}
+                </Typography>
+              }
+            />
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                {course.description}
+              </Typography>
+            </CardContent>
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                px: 2,
+                pb: 2,
+              }}
+            >
+              <Button
+                size="small"
+                startIcon={<VisibilityIcon />}
+                onClick={() => router.push(`/dashboard/courses/${course.id}`)}
               >
-                View Details
-              </Link>
-              {user?.role === 'admin' && (
-                <div className="space-x-2">
-                  <Link
-                    href={`/dashboard/courses/${course.id}/edit`}
-                    className="text-yellow-500 hover:text-yellow-700"
+                View
+              </Button>
+
+              {user?.role === "admin" && (
+                <Box>
+                  <IconButton
+                    color="primary"
+                    onClick={() =>
+                      router.push(`/dashboard/courses/${course.id}/edit`)
+                    }
                   >
-                    Edit
-                  </Link>
-                  <button
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    color="error"
                     onClick={() => deleteCourse.mutate(course.id)}
-                    className="text-red-500 hover:text-red-700"
                   >
-                    Delete
-                  </button>
-                </div>
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
               )}
-            </div>
-          </div>
+            </CardActions>
+          </Card>
         ))}
       </div>
-    </div>
-  )
+    </Container>
+  );
 }
