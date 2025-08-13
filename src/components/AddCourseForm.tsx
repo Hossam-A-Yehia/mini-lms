@@ -8,6 +8,7 @@ import { useCourses } from "@/hooks/useCourses";
 import { CourseFormValues } from "@/models/course";
 import { Paper, Typography, Box, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -28,7 +29,10 @@ export default function AddCourseForm() {
 
   const onSubmit = (data: CourseFormValues) => {
     createCourse.mutate(data, {
-      onSuccess: () => router.push("/dashboard"),
+      onSuccess: () => {
+        toast.success("Course created successfully");
+        router.push("/dashboard");
+      },
     });
   };
 

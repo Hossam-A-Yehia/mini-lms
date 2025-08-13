@@ -9,6 +9,7 @@ import { LessonFormValues } from "@/models/lesson";
 import { useParams } from "next/navigation";
 import { Paper, Typography, Box, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -33,7 +34,10 @@ export default function AddLessonForm() {
     createLesson.mutate(
       { ...data, courseId },
       {
-        onSuccess: () => router.push(`/dashboard/courses/${courseId}`),
+        onSuccess: () => {
+          toast.success("Lesson created successfully");
+          router.push(`/dashboard/courses/${courseId}`);
+        },
       }
     );
   };

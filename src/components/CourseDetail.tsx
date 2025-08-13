@@ -21,6 +21,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import toast from "react-hot-toast";
 
 export default function CourseDetail({
   params,
@@ -30,9 +31,19 @@ export default function CourseDetail({
   const resolvedParams = React.use(params);
 
   const { courses, isLoading: isCoursesLoading } = useCourses();
-  const { lessons, isLoading: isLessonsLoading } = useLessons(resolvedParams.id);
+  const { lessons, isLoading: isLessonsLoading } = useLessons(
+    resolvedParams.id
+  );
   const { user } = useAuth();
   const { deleteLesson } = useLessons(resolvedParams.id);
+
+  const handleDelete = (lessonId: string) => {
+    deleteLesson.mutate(lessonId, {
+      onSuccess: () => {
+        toast.success("Lesson deleted successfully");
+      },
+    });
+  };
 
   const isAdmin = user?.role === "admin";
 
@@ -110,7 +121,7 @@ export default function CourseDetail({
                           size="small"
                           variant="text"
                           color="error"
-                          onClick={() => deleteLesson.mutate(lesson.id)}
+                          onClick={() => handleDelete(lesson.id)}
                         >
                           Delete
                         </Button>
@@ -127,7 +138,11 @@ export default function CourseDetail({
                           color: "inherit",
                         }}
                       >
-                        <Typography variant="body1" fontWeight="medium" color="primary">
+                        <Typography
+                          variant="body1"
+                          fontWeight="medium"
+                          color="primary"
+                        >
                           {lesson.title}
                         </Typography>
                       </Link>

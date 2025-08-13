@@ -17,6 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRouter } from "next/navigation";
 import { useCourses } from "@/hooks/useCourses";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -24,7 +25,16 @@ export default function Dashboard() {
   const { courses, isLoading, deleteCourse } = useCourses();
   const { user } = useAuth();
 
+  const handleDelete = (id: string) => {
+    deleteCourse.mutate(id, {
+      onSuccess: () => {
+        toast.success("Course deleted successfully");
+      },
+    });
+  };
+
   if (isLoading) return <div>Loading...</div>;
+
   return (
     <Container maxWidth="lg" sx={{ mt: 8 }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -34,7 +44,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
           <Card
-          key={course.id}
+            key={course.id}
             elevation={4}
             sx={{
               borderRadius: 3,
@@ -83,7 +93,7 @@ export default function Dashboard() {
                   </IconButton>
                   <IconButton
                     color="error"
-                    onClick={() => deleteCourse.mutate(course.id)}
+                    onClick={() => handleDelete(course.id)}
                   >
                     <DeleteIcon />
                   </IconButton>

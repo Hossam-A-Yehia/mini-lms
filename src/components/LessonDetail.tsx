@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Lesson } from "@/models/lesson";
 import {
   Box,
@@ -13,6 +12,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLessons } from "@/hooks/useLessons";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LessonDetail({
   lesson,
@@ -21,8 +22,18 @@ export default function LessonDetail({
   lesson: Lesson;
   isAdmin: boolean;
 }) {
-    const { deleteLesson } = useLessons(lesson.courseId);
-  
+  const router = useRouter();
+  const { deleteLesson } = useLessons(lesson.courseId);
+
+  const handleDelete = () => {
+    deleteLesson.mutate(lesson.id, {
+      onSuccess: () => {
+        router.push(`/dashboard/courses/${lesson.courseId}`);
+        toast.success('Lesson deleted successfully');
+      },
+    });
+  };
+
   return (
     <Box maxWidth="800px" mx="auto" mt={10}>
       <Card sx={{ mb: 4 }}>
@@ -36,9 +47,9 @@ export default function LessonDetail({
             isAdmin && (
               <Button
                 variant="outlined"
-                color="warning"
+                color="error"
                 startIcon={<DeleteIcon />}
-                onClick={() => deleteLesson.mutate(lesson.id)}
+                onClick={handleDelete}
               >
                 Delete Lesson
               </Button>
