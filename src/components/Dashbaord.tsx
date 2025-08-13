@@ -8,6 +8,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CircularProgress,
   Container,
   IconButton,
   Typography,
@@ -33,7 +34,12 @@ export default function Dashboard() {
     });
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <Box display="flex" justifyContent="center" mt={6}>
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Container maxWidth="lg" sx={{ mt: 8 }}>
