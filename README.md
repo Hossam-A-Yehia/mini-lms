@@ -113,15 +113,15 @@ npm run test
 
 ---
 
-##  Task Requirements Coverage
+##  Task Requirements Coverage   
 ✅ Next.js App Router  
-✅ Mock authentication & role-based access  
-✅ Firebase Firestore CRUD (except for the update functionality)
+✅ Mock authentication & role-based access   
+✅ Firebase Firestore CRUD (except for the update functionality)      
 ✅ Protected routes  
-✅ React Query for data handling  
+✅ React Query for data handling   
 ✅ Responsive UI with Tailwind & MUI  
 ✅ Dockerized environment  
-✅ Unit tests with Jest  (Just one file)
-✅ Zod form validation
+✅ Unit tests with Jest  (Just one file)   
+✅ Zod form validation 
 
 ---
