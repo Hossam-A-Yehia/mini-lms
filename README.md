@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mini LMS Dashboard
 
-## Getting Started
+A **Mini Learning Management System** built with **Next.js (App Router)**, **Firebase Firestore**, and **Docker**.  
+Supports **mock authentication**, **role-based access control**, and **CRUD** operations for courses and lessons.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- **Mock Authentication**
+  - Email/username-based login (no backend)
+  - Auth state persistence using cookies/localStorage
+  - Role-based access: `admin` (full CRUD) / `user` (view only)
+
+- **Course Management (CRUD)**
+  - Create, edit, delete, and view courses
+  - Show lesson count per course
+
+- **Lesson Management (CRUD)**
+  - Create, edit, delete, and view lessons
+  - Markdown content support (optional)
+
+- **Dashboard**
+  - Responsive layout with navigation (Courses, Logout)
+  - Displays logged-in user's name and role
+
+- **Data Handling**
+  - Uses **React Query** for fetching/mutations
+  - Proper loading & error states
+  - Optional optimistic updates
+
+- **Tech & Tooling**
+  - Firebase Firestore for storage
+  - **Tailwind CSS** + MUI for styling
+  - **Zod** for form validation
+  - **Jest + React Testing Library** for unit tests
+  - **Docker** for containerized setup
+
+---
+
+## Technologies
+
+- [Next.js 13+ (App Router)]
+- [React 19]
+- [Firebase Firestore]
+- [Tailwind CSS]
+- [MUI]
+- [React Query]
+- [Zod]
+- [Jest]
+- [Docker]
+
+---
+
+## Project Structure
+
+```
+src/
+ ├── app/              # Next.js App Router pages & layouts
+ ├── components/       # Reusable UI components
+ ├── hooks/            # Custom React hooks
+ ├── lib/              # Firebase & utilities
+ ├── models/           # TypeScript models
+ └── tests/            # Unit tests
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup Instructions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1️- Clone the repository
+```bash
+git clone https://github.com/Hossam-A-Yehia/mini-lms.git
+cd mini-lms
+```
 
-## Learn More
+### 2️- Install dependencies
+```bash
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3️- Run locally
+```bash
+npm run dev
+```
+App will be available at: **http://localhost:3000**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+##  Running with Docker
 
-## Deploy on Vercel
+Build and run using Docker Compose:
+```bash
+docker-compose up --build
+```
+Then visit: **http://localhost:3000**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+##  Running Tests
+```bash
+npm run test
+```
+
+---
+
+##  User Roles
+
+| Role   | Permissions |
+|--------|-------------|
+| Admin  | Create, edit, delete, view courses & lessons |
+| User   | View courses & lessons only |
+
+---
+
+##  Task Requirements Coverage
+✅ Next.js App Router  
+✅ Mock authentication & role-based access  
+✅ Firebase Firestore CRUD (except for the update functionality)
+✅ Protected routes  
+✅ React Query for data handling  
+✅ Responsive UI with Tailwind & MUI  
+✅ Dockerized environment  
+✅ Unit tests with Jest  (Just one file)
+✅ Zod form validation
+
+---
