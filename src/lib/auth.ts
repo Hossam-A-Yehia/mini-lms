@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'
 
 type User = {
   email: string;
@@ -10,6 +11,7 @@ type User = {
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter()
 
   const login = (email: string) => {
     const role: "admin" | "user" = email.includes("admin") ? "admin" : "user";
@@ -22,6 +24,8 @@ export const useAuth = () => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    router.push('/login')
+
   };
 
   useEffect(() => {

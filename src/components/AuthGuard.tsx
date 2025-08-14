@@ -1,24 +1,38 @@
-'use client'
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAuth } from "@/lib/auth";
 
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { useAuth } from '@/lib/auth'
+type GuardType = "protected" | "public";
 
-export default function AuthGuard({ children, role }: { children: React.ReactNode; role?: 'admin' | 'user' }) {
-  const { user } = useAuth()
-  const router = useRouter()
+export default function AuthGuard({
+  children,
+  role,
+  type = "protected",
+}: {
+  children: React.ReactNode;
+  role?: "admin" | "user";
+  type?: GuardType;
+}) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    } else if (role && user.role !== role) {
-      router.push('/dashboard')
+    if (!loading) {
+      if (type === "protected" && !user) {
+        router.push("/login");
+      }
+      if (type === "public" && user) {
+        router.push("/dashboard");
+      }
     }
-  }, [user, router, role])
+  }, [user, loading, router, type]);
 
-  if (!user || (role && user.role !== role)) {
-    return null
+  if (loading) return null;
+
+  if (type === "protected" && (!user || (role && user.role !== role))) {
+    return null;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }

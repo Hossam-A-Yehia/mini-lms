@@ -1,6 +1,6 @@
 'use client'
+import { useState } from 'react'
 
-import * as React from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
 import AppBar from '@mui/material/AppBar'
@@ -28,14 +28,13 @@ const drawerWidth = 260
 
 interface Props {
   window?: () => Window
-  children?: React.ReactNode
 }
 
 export default function ResponsiveDashboardDrawer(props: Props) {
-  const { window, children } = props
+  const { window } = props
   const { user, logout } = useAuth()
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [isClosing, setIsClosing] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
 
   const handleDrawerClose = () => {
     setIsClosing(true)

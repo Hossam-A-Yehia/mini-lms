@@ -1,6 +1,5 @@
 "use client";
-
-import * as React from "react";
+import { use } from "react";
 import { notFound } from "next/navigation";
 import { useCourses } from "@/hooks/useCourses";
 import { useAuth } from "@/lib/auth";
@@ -28,7 +27,7 @@ export default function CourseDetail({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const resolvedParams = React.use(params);
+  const resolvedParams = use(params);
 
   const { courses, isLoading: isCoursesLoading } = useCourses();
   const { lessons, isLoading: isLessonsLoading } = useLessons(
