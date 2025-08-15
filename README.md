@@ -113,6 +113,19 @@ npm run test
 
 ---
 
+##  Login for Testing Roles
+
+For testing purposes on the dashboard:
+
+- **Admin Login** → Enter **any email** that contains the word `admin` (e.g., `admin@gmail.com`) in the login page.  
+  This will log you in as an **Admin** with full permissions.
+
+- **User Login** → Enter **any other email** without the word `admin`.  
+  This will log you in as a regular **User** with view-only permissions.
+
+---
+
+
 ##  Task Requirements Coverage   
 ✅ Next.js App Router  
 ✅ Mock authentication & role-based access   
