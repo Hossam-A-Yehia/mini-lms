@@ -1,16 +1,18 @@
 # Mini LMS Dashboard
 
 A **Mini Learning Management System** built with **Next.js (App Router)**, **Firebase Firestore**, and **Docker**.  
-Supports **mock authentication**, **role-based access control**, and **CRUD** operations for courses and lessons.
+Supports **Firebase Authentication**, **role-based access control**, and **CRUD** operations for courses and lessons.
 
 ---
 
 ## Features
 
-- **Mock Authentication**
-  - Email/username-based login (no backend)
-  - Auth state persistence using cookies/localStorage
+- **Firebase Authentication**
+  - Email/password authentication with Firebase Auth
+  - User registration and login functionality
+  - Auth state persistence with Firebase
   - Role-based access: `admin` (full CRUD) / `user` (view only)
+  - Real-time authentication state management
 
 - **Course Management (CRUD)**
   - Create, edit, delete, and view courses
@@ -113,22 +115,32 @@ npm run test
 
 ---
 
-##  Login for Testing Roles
+##  Authentication & Testing
 
-For testing purposes on the dashboard:
+### Firebase Auth Setup
+The application uses Firebase Authentication for secure user management. Users can:
+- **Register** new accounts with email/password
+- **Login** with existing credentials
+- **Logout** securely
 
-- **Admin Login** → Enter **any email** that contains the word `admin` (e.g., `admin@gmail.com`) in the login page.  
-  This will log you in as an **Admin** with full permissions.
+### Role Assignment
+User roles are automatically determined based on email:
+- **Admin Role** → Emails containing `admin` (e.g., `admin@example.com`)
+- **User Role** → All other email addresses
 
-- **User Login** → Enter **any other email** without the word `admin`.  
-  This will log you in as a regular **User** with view-only permissions.
+### Testing Authentication
+1. **Create Admin Account**: Register with an email containing "admin" (e.g., `admin@test.com`)
+2. **Create User Account**: Register with any other email (e.g., `user@test.com`)
+3. **Login/Logout**: Use the authentication form to test login/logout functionality
+
+**Note**: When you register a new account, Firebase automatically logs you in immediately after account creation. This is standard Firebase behavior and provides a seamless user experience - no need to manually login after registration.
 
 ---
 
 
 ##  Task Requirements Coverage   
 ✅ Next.js App Router  
-✅ Mock authentication & role-based access   
+✅ Firebase authentication & role-based access   
 ✅ Firebase Firestore CRUD (except for the update functionality)      
 ✅ Protected routes  
 ✅ React Query for data handling   

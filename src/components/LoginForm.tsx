@@ -10,19 +10,36 @@ import {
   Paper,
   TextField,
   Typography,
+  Link,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
-  const { login } = useAuth();
+  const [password, setPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { login, register } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email);
-    router.push("/dashboard");
+    setLoading(true);
+    
+    try {
+      if (isRegistering) {
+        await register(email, password);
+      } else {
+        await login(email, password);
+      }
+      router.push("/dashboard");
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -82,7 +99,7 @@ export default function LoginForm() {
               color: "primary.main",
             }}
           >
-            Sign In
+            {isRegistering ? "Create Account" : "Sign In"}
           </Typography>
 
           <Box
@@ -99,8 +116,24 @@ export default function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="user@example.com"
               required
+              disabled={loading}
               InputProps={{
                 startAdornment: <EmailIcon color="action" sx={{ mr: 1 }} />,
+              }}
+            />
+
+            <TextField
+              fullWidth
+              label="Password"
+              variant="outlined"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+              disabled={loading}
+              InputProps={{
+                startAdornment: <LockIcon color="action" sx={{ mr: 1 }} />,
               }}
             />
 
@@ -108,15 +141,30 @@ export default function LoginForm() {
               type="submit"
               variant="contained"
               size="large"
-              startIcon={<LoginIcon />}
+              disabled={loading}
+              startIcon={isRegistering ? <PersonAddIcon /> : <LoginIcon />}
               sx={{
                 py: 1.4,
                 fontWeight: "bold",
                 fontSize: "1rem",
               }}
             >
-              Login
+              {loading ? "Processing..." : isRegistering ? "Create Account" : "Login"}
             </Button>
+
+            <Box sx={{ textAlign: "center", mt: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                {isRegistering ? "Already have an account?" : "Don't have an account?"}
+                <Link
+                  component="button"
+                  type="button"
+                  onClick={() => setIsRegistering(!isRegistering)}
+                  sx={{ ml: 1, cursor: "pointer" }}
+                >
+                  {isRegistering ? "Sign In" : "Create Account"}
+                </Link>
+              </Typography>
+            </Box>
           </Box>
 
         </Paper>
