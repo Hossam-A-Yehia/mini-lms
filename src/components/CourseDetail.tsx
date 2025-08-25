@@ -76,7 +76,6 @@ export default function CourseDetail({
                 color="warning"
                 component={Link}
                 href={`/dashboard/courses/${course.id}/edit`}
-                disabled
               >
                 Edit Course
               </Button>
@@ -112,7 +111,6 @@ export default function CourseDetail({
                           color="warning"
                           component={Link}
                           href={`/dashboard/courses/${course.id}/lessons/${lesson.id}/edit`}
-                          disabled
                         >
                           Edit
                         </Button>

@@ -14,13 +14,17 @@ Supports **Firebase Authentication**, **role-based access control**, and **CRUD*
   - Role-based access: `admin` (full CRUD) / `user` (view only)
   - Real-time authentication state management
 
-- **Course Management (CRUD)**
-  - Create, edit, delete, and view courses
+- **Course Management (Full CRUD)**
+  - Create, read, update, and delete courses
+  - Edit course title and description
   - Show lesson count per course
+  - Admin-only course management
 
-- **Lesson Management (CRUD)**
-  - Create, edit, delete, and view lessons
-  - Markdown content support (optional)
+- **Lesson Management (Full CRUD)**
+  - Create, read, update, and delete lessons
+  - Edit lesson title and content
+  - Course-specific lesson organization
+  - Admin-only lesson management
 
 - **Dashboard**
   - Responsive layout with navigation (Courses, Logout)
@@ -128,10 +132,23 @@ User roles are automatically determined based on email:
 - **Admin Role** → Emails containing `admin` (e.g., `admin@example.com`)
 - **User Role** → All other email addresses
 
-### Testing Authentication
+### Testing Authentication & CRUD Operations
 1. **Create Admin Account**: Register with an email containing "admin" (e.g., `admin@test.com`)
 2. **Create User Account**: Register with any other email (e.g., `user@test.com`)
 3. **Login/Logout**: Use the authentication form to test login/logout functionality
+
+### Testing Full CRUD Operations (Admin Only)
+**Courses:**
+- **Create**: Navigate to `/dashboard/courses/new` or use "Create Course" button
+- **Read**: View course list on dashboard and individual course details
+- **Update**: Click "Edit Course" button on course cards or course detail page
+- **Delete**: Click delete icon on course cards
+
+**Lessons:**
+- **Create**: Click "Add Lesson" button on course detail page
+- **Read**: View lessons list on course detail page and individual lesson content
+- **Update**: Click "Edit" button next to any lesson in course detail page
+- **Delete**: Click "Delete" button next to any lesson in course detail page
 
 **Note**: When you register a new account, Firebase automatically logs you in immediately after account creation. This is standard Firebase behavior and provides a seamless user experience - no need to manually login after registration.
 
@@ -141,7 +158,7 @@ User roles are automatically determined based on email:
 ##  Task Requirements Coverage   
 ✅ Next.js App Router  
 ✅ Firebase authentication & role-based access   
-✅ Firebase Firestore CRUD (except for the update functionality)      
+✅ Firebase Firestore CRUD (Complete - Create, Read, Update, Delete)      
 ✅ Protected routes  
 ✅ React Query for data handling   
 ✅ Responsive UI with Tailwind & MUI  

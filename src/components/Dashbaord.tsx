@@ -89,7 +89,6 @@ export default function Dashboard() {
               {user?.role === "admin" && (
                 <Box>
                   <IconButton
-                    disabled
                     color="primary"
                     onClick={() =>
                       router.push(`/dashboard/courses/${course.id}/edit`)
