@@ -30,11 +30,18 @@ export default function CourseDetail({
   const resolvedParams = use(params);
 
   const { courses, isLoading: isCoursesLoading } = useCourses();
-  const { lessons, isLoading: isLessonsLoading } = useLessons(
-    resolvedParams.id
-  );
+  const { 
+    lessons, 
+    isLoading: isLessonsLoading, 
+    currentPage,
+    totalCount,
+    hasNextPage,
+    hasPrevPage,
+    nextPage,
+    prevPage,
+    deleteLesson 
+  } = useLessons(resolvedParams.id);
   const { user } = useAuth();
-  const { deleteLesson } = useLessons(resolvedParams.id);
 
   const handleDelete = (lessonId: string) => {
     deleteLesson.mutate(lessonId, {
@@ -45,6 +52,8 @@ export default function CourseDetail({
   };
 
   const isAdmin = user?.role === "admin";
+  const pageSize = 6; 
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   if (isCoursesLoading || isLessonsLoading) {
     return (
@@ -56,6 +65,7 @@ export default function CourseDetail({
 
   const course = courses.find((c) => c.id === resolvedParams.id);
   if (!course) return notFound();
+console.log(lessons);
 
   return (
     <Box maxWidth="800px" mx="auto" mt={10}>
@@ -94,63 +104,93 @@ export default function CourseDetail({
       <Typography variant="h6" gutterBottom>
         Lessons
       </Typography>
-      {lessons.length === 0 ? (
+      {totalCount === 0 ? (
         <Typography color="text.secondary">No lessons yet.</Typography>
       ) : (
-        <Card>
-          <List>
-            {lessons.map((lesson, index) => (
-              <Box key={lesson.id}>
-                <ListItem
-                  secondaryAction={
-                    isAdmin && (
-                      <Stack direction="row" spacing={1}>
-                        <Button
-                          size="small"
-                          variant="text"
-                          color="warning"
-                          component={Link}
-                          href={`/dashboard/courses/${course.id}/lessons/${lesson.id}/edit`}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="small"
-                          variant="text"
-                          color="error"
-                          onClick={() => handleDelete(lesson.id)}
-                        >
-                          Delete
-                        </Button>
-                      </Stack>
-                    )
-                  }
-                >
-                  <ListItemText
-                    primary={
-                      <Link
-                        href={`/dashboard/courses/${course.id}/lessons/${lesson.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "inherit",
-                        }}
-                      >
-                        <Typography
-                          variant="body1"
-                          fontWeight="medium"
-                          color="primary"
-                        >
-                          {lesson.title}
-                        </Typography>
-                      </Link>
+        <>
+          <Card>
+            <List>
+              {lessons.map((lesson, index) => (
+                <Box key={lesson.id}>
+                  <ListItem
+                    secondaryAction={
+                      isAdmin && (
+                        <Stack direction="row" spacing={1}>
+                          <Button
+                            size="small"
+                            variant="text"
+                            color="success"
+                            component={Link}
+                            href={`/dashboard/courses/${course.id}/lessons/${lesson.id}/edit`}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="text"
+                            color="error"
+                            onClick={() => handleDelete(lesson.id)}
+                          >
+                            Delete
+                          </Button>
+                        </Stack>
+                      )
                     }
-                  />
-                </ListItem>
-                {index < lessons.length - 1 && <Divider />}
+                  >
+                    <ListItemText
+                      primary={
+                        <Link
+                          href={`/dashboard/courses/${course.id}/lessons/${lesson.id}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            fontWeight="medium"
+                            color="primary"
+                          >
+                            {lesson.title}
+                          </Typography>
+                        </Link>
+                      }
+                    />
+                  </ListItem>
+                  {index < lessons.length - 1 && <Divider />}
+                </Box>
+              ))}
+            </List>
+          </Card>
+          {totalPages > 1 && (
+            <Stack spacing={2} alignItems="center" sx={{ mt: 3 }}>
+              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                <Button
+                  variant="outlined"
+                  onClick={prevPage}
+                  disabled={!hasPrevPage}
+                  size="small"
+                >
+                  Previous
+                </Button>
+                <Typography variant="body2">
+                  Page {currentPage} of {totalPages}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={nextPage}
+                  disabled={!hasNextPage}
+                  size="small"
+                >
+                  Next
+                </Button>
               </Box>
-            ))}
-          </List>
-        </Card>
+              <Typography variant="body2" color="text.secondary">
+                Showing {lessons.length} of {totalCount} lessons
+              </Typography>
+            </Stack>
+          )}
+        </>
       )}
     </Box>
   );

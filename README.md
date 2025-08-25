@@ -150,6 +150,13 @@ User roles are automatically determined based on email:
 - **Update**: Click "Edit" button next to any lesson in course detail page
 - **Delete**: Click "Delete" button next to any lesson in course detail page
 
+### Sample Data for Testing
+**To see real data and test pagination functionality:**
+- Navigate to the course titled **"Entrepreneurship & Startup Growth"**
+- This course contains multiple lessons (11+ lessons) to demonstrate the pagination system
+- Most other courses in the system are empty or contain minimal data
+- Use this course to test lesson pagination, CRUD operations, and navigation features
+
 **Note**: When you register a new account, Firebase automatically logs you in immediately after account creation. This is standard Firebase behavior and provides a seamless user experience - no need to manually login after registration.
 
 ---

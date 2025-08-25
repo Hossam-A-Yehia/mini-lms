@@ -12,6 +12,8 @@ import {
   Container,
   IconButton,
   Typography,
+  Pagination,
+  Stack,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,8 +25,21 @@ import toast from "react-hot-toast";
 export default function Dashboard() {
   const router = useRouter();
 
-  const { courses, isLoading, deleteCourse } = useCourses();
+  const { 
+    courses, 
+    isLoading, 
+    deleteCourse, 
+    currentPage, 
+    totalCount, 
+    hasNextPage, 
+    hasPrevPage, 
+    nextPage, 
+    prevPage 
+  } = useCourses();
   const { user } = useAuth();
+
+  const pageSize = 6;
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const handleDelete = (id: string) => {
     deleteCourse.mutate(id, {
@@ -108,6 +123,35 @@ export default function Dashboard() {
           </Card>
         ))}
       </div>
+      {totalPages > 1 && (
+        <Stack spacing={2} alignItems="center" sx={{ mt: 4, mb: 2 }}>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Button
+              variant="outlined"
+              onClick={prevPage}
+              disabled={!hasPrevPage}
+              size="small"
+            >
+              Previous
+            </Button>
+            <Typography variant="body2">
+              Page {currentPage} of {totalPages}
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={nextPage}
+              disabled={!hasNextPage}
+              size="small"
+            >
+              Next
+            </Button>
+          </Box>
+          <Typography variant="body2" color="text.secondary">
+            Showing {courses.length} of {totalCount} courses
+          </Typography>
+
+        </Stack>
+      )}
     </Container>
   );
 }
